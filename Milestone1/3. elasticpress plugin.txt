@@ -1,0 +1,15 @@
+You can use Elasticpress plugin to customize your searches.
+
+Integrate Wordpress with Elasticsearch
+  a. In Settings, Go to Third-Party/Self-Hosted since we are using es in aws ec2,  and put your host in Elasticsearch Host URL
+    in your case -  http://52.14.225.213:9200
+  b. Index Health - You can check if you are connected to es and es is up. If not, it will warn you.
+  c. Search Fields and weighting - You can define which fields to be searchable and weights for each.
+  d. you can customize search results, arrange sorting order for specific results, attach docs in result, which may be related
+    but not retreivable from search terms.
+  e. customize query for further custom results -
+  /wp-content/plugins/elasticpress/includes/classes/Indexable/Post/Post.php - line 1042 onwards
+
+NOTE:
+This header in the search response identifies that request is processed through elasticpress.
+x-elasticpress-query: true

@@ -1,0 +1,44 @@
+ELASTICSEARCH INSTALLATION IN LINUX
+
+This installation is for a debian based system. 
+
+STEP 1:
+Run following commands to update repository:
+rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+cd /etc/yum.repos.d/
+
+STEP 2:
+vi elasticsearch.repo
+#Add this entry in elasticsearch.repo:
+[elasticsearch]
+name=Elasticsearch repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=0
+autorefresh=1
+type=rpm-md
+
+STEP 3:
+Install elasticsearch and enable service for startup:
+sudo yum install --enablerepo=elasticsearch elasticsearch
+sudo systemctl daemon-reload
+sudo systemctl enable elasticsearch.service
+
+STEP 4:
+Update yml file:
+cd /etc/elasticsearch
+vi /etc/elasticsearch/elaticsearch.yml
+#Add entries for enabling host ip and ports:
+transport.host: localhost
+transport.tcp.port: 9300
+http.port: 9200
+network.host: 0.0.0.0
+
+STEP 5:
+Start elasticsearch:
+systemctl start elasticsearch.service
+
+STEP 6:
+Test your instance:
+curl -X GET 'http://localhost:9200'

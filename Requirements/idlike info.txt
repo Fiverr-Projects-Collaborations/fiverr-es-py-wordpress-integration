@@ -1,0 +1,39 @@
+idLike
+
+https://idlike.app/wp-admin
+username: nikhil
+pwd: **(x8dpJ62(L!4pZnRJuzqwQ
+
+elastic.co
+danielecelsa@gmail.com
+323idlikePWD!!!323
+
+
+https://f3e10a2e37d0438f8297ed375c306bb8.us-central1.gcp.cloud.es.io:9243
+elastic
+JyY2xAK1mrXxK6dmfF8pGtuO
+
+
+
+["Cipolla","Piselli","Pomodoro","Mozzarella","Prezzemolo"]
+AWS
+email: fabri.casella@gmail.com
+password: 8i_.93i;.*nsum
+
+FTP Access
+ftp hostname:ftp.idlike.app
+username:u283414728.dev_eloper8973298j
+password:.,(mksm?èò_losiQ
+
+
+eC2-
+ssh -i idlike-aws.pem ec2-user@52.14.225.213
+
+API-
+https://developer.wordpress.org/rest-api/reference/posts/
+Plugins-
+https://rudrastyh.com/wordpress/rest-api-create-delete-posts.html
+BASE 64-
+https://developer.mypurecloud.com/api/rest/authorization/base-64-encoding.html
+
+echo -n nikhil:zkyu zman prNt mUcF A0hg sY2B | base64

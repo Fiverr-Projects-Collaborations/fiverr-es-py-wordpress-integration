@@ -1,0 +1,11 @@
+aws info provided:
+email: fabri.casella@gmail.com
+password: 8i_.93i;.*nsum
+
+NOTE: We don't have elastic IP for aws instance, so if possible don't stop the ec2 instance, reboot instead,
+otherwise public IP would change and you need to change new IP everywhere.
+
+command to ssh into ec2 instance:
+ssh -i idlike-aws.pem ec2-user@52.14.225.213
+
+NOTE: idlike.pem is provided along
