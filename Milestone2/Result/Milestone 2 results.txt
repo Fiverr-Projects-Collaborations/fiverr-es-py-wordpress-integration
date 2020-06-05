@@ -1,0 +1,67 @@
+############
+    ETL
+############
+Restaurant - create if not exists for a city
+1. Create "kind of restaurant" taxonomy if not exists with heirarchy.
+2. Create "city" taxonomy if not exists.
+3. Create the restaurant for the City. If restaurant already exists for the city, update the restaurant
+based on id.
+
+Food - create if not exists for a restaurant for a city
+1. Create media for the food.
+2. Create "food category" taxonomy if not exists with heirarchy.
+3. Create "food local" taxonomy if not exists with heirarchy.
+4. Create the food for the restaurant for the city. If food already exists for the restaurant
+for the city, update the food based on id.
+NOTE: For food to be added, restaurant for the city should already exist from restaurant file.
+
+
+############
+    AWS
+############
+Move Instance to New Region - AWS EC2:
+1. Go to AWS EC2 -> Select Your instance.
+2. Click Actions -> Image -> Create Image.
+Under AMI You will see the image created of your EC2.
+3. Now, select your AMI -> Click Actions -> Copy AMI -> Select region.
+You would see AMI in new region selected.
+4. Launch new instance in new Region and click My AMIs
+5. Choose you AMI that was copied over to create your EC2 instance.
+6. Deregister your AMIs from both region.
+7. Terminate EC2 from old region.
+
+
+New EC2 details (milan):
+IP => 15.161.79.20
+Key file for new region => idlike-milano.pem
+Command for SSH => ssh -i idlike-milano.pem ec2-user@15.161.79.20
+IP are static now, so STOP won't update your public IP.
+
+
+#################
+  ELASTICSEARCH
+#################
+Changes for new fields to search for post.
+/wp-content/plugins/elasticpress/includes/classes/Indexable/Post/Post.php code changes
+line 279,315  - add new attributes to elasticsearch index.
+line 786,811,820,1133,1190,1272 - filters when searching
+line 1438 - enable to print es query produced to test
+
+Changes for new fields to index for post.
+/wp-content/plugins/elasticpress/includes/mappings/post/7-0.php code changes
+line 84 - synonym analyzer
+line 102 - filter for synonym analyzer
+line 310 - changed analyzer standart to synonym
+line 328 - added fields for synonym search
+
+Synonym file location - /etc/elasticsearch/analysis/synonym.txt
+
+Search food on the basis of:
+Restaurant - restaurant_title, restaurant_name, city, address
+food Ingredients
+food Title
+Food Keywords
+Synonyms included for piatto_title, restaurant_title, restaurant_name
+
+NOTE: In case elasticsearch is down, reboot your ec2 instance in aws.
+Also, after updating synonym.txt file, you should reboot ec2 instance in aws.

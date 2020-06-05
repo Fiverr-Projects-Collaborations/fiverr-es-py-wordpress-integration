@@ -1,0 +1,154 @@
+Milestone3
+-----------
+
+ETL
+---
+1. reporting & error messages with row details if not inserting (like db err, restaurant not exists)
+2. primary taxonomy - child
+3. if child taxonomy appear in multiple parent, choose appropriate child
+4. new column to consider for food - Food Ingredients Excerpts
+5. image description with food and restaurant item. -> Food - Restaurant - City - provided in wa group
+6. media for restaurant if valid url, also check if checking food url to be valid, also add list of food images, currently only in featured_media
+7. update logic (if exists, update with id)
+8. automation
+9. optimization - performance
+10. delete - need to check how it should work
+
+
+FOOD IMAGES:
+ALT = TITLE = " ‘food title’ di ‘restaurant_associated’ "
+
+RESTAURANT IMAGES:
+ALT = TITLE = "‘restaurant title’" 
+
+There should be a simple check for multiple pictures:
+The first picture for each food or restaurant will have the structure above.
+The second picture of a food should be " ‘food title’_2 di ‘restaurant_associated’ " 
+...
+The n picture of a food should be " ‘food title’_n di ‘restaurant_associated’ "
+
+Same for restaurant ("‘restaurant title’_n")
+
+If (" ‘food title’ di ‘restaurant_associated’ " NOT exist) -> assign ALT and TITLE
+else
+While with n from 2 to whatever
+If (" ‘food title’_n di ‘restaurant_associated’ " NOT exist) -> assign ALT and TITLE
+
+
+
+ES
+----
+1.AND instead of OR
+(eg: BENCH CHEESE)
+2.fuziness - eg: rib
+3.sorting  - provided in wa group
+sort by weight,if weights same, 
+sort by rating, if rating also same,
+sort by exact match
+4.suggestion - RESEARCH
+https://themeisle.com/blog/wordpress-autocomplete-search/
+5. Stop words 
+https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stop-tokenfilter.html
+
+aws
+----
+1. wp migration - almost complete - last step
+https://youtu.be/vFbpQkFfwiA
+2. app domain - almost complete - last step
+here the credentials of godaddy:
+User code: 231395584
+Pwd: 212212aAa
+3. es ram up - done
+4. cron setup on wp server for py script
+5. backup/restore script
+https://wordpress.org/plugins/all-in-one-wp-migration/
+https://docs.bitnami.com/aws/apps/wordpress/administration/backup-restore/
+https://aws.amazon.com/premiumsupport/knowledge-center/ebs-snapshot-billing/
+6. Update image for Bitnami aws wp
+https://aws.amazon.com/marketplace/pp/B00NN8Y43U?qid=1590592529031&sr=0-1&ref_=srh_res_product_title
+
+
+
+Apache —>
+/opt/bitnami/apache2/bin/apachectl restart
+
+
+
+Wordpress dir—>
+ssh -i idlike-milano.pem bitnami@15.161.24.221
+/opt/bitnami/apps/wordpress/htdocs
+
+
+Open tunnel to access phpmyadmin->
+ssh -N -L 8888:127.0.0.1:80 -i idlike-milano.pem bitnami@15.161.24.221
+enable db-
+ssh -N -L 8888:127.0.0.1:3306 -i idlike-milano.pem bitnami@15.161.24.221
+you can access db at localhost:8888
+
+Open in browser->
+http://127.0.0.1:8888/phpmyadmin
+User: bn_wordpress
+Pass: cf91622746
+
+define( 'DB_NAME', 'bitnami_wordpress' );
+/** MySQL database username */
+define( 'DB_USER', 'bn_wordpress' );
+/** MySQL database password */
+define( 'DB_PASSWORD', 'cf91622746' );
+/** MySQL hostname */
+define( 'DB_HOST', 'localhost:3306' );
+
+
+
+Setting Bitnami application password to 'jA1e7uMdQGsH'         #
+[   16.706687] bitnami[1123]: #        (the default application username is 'user')
+
+wp migration increase upload limit (default - 40M)
+https://help.servmask.com/2018/10/27/how-to-increase-maximum-upload-file-size-in-wordpress/
+upload_max_filesize - 600M
+post_max_size - 600M
+update in file = /opt/bitnami/php/etc/php.ini
+then restart = /opt/bitnami/ctlscript.sh restart
+
+
+use api with ip
+https://community.bitnami.com/t/wordpress-rest-api-basic-authentication-header-not-working/59090
+1. Permission to plugin -
+sudo chown bitnami:daemon -R /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/Basic-Auth (in our case its Archive)
+sudo chmod g+w -R  /opt/bitnami/apps/wordpress/htdocs/wp-content/plugins/Basic-Auth
+2. Add these in /opt/bitnami/apps/wordpress/conf/httpd-app.conf  after USE_PHP_FPM-
+RewriteEngine on
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+3. restart apache - /opt/bitnami/ctlscript.sh restart apache
+
+Things to do for Bitnami aws wp -
+1. restrict use of ip, diable banner
+https://community.bitnami.com/t/how-to-block-access-ip/61773
+https://docs.bitnami.com/aws/how-to/get-started-wordpress-aws-marketplace-intermediate/
+2. Install certificate
+sudo /opt/bitnami/bncert-tool
+https://docs.bitnami.com/aws/how-to/generate-install-lets-encrypt-ssl/
+3. Load Balancer
+https://docs.bitnami.com/aws/how-to/configure-elb-ssl-aws/
+
+NOTE:
+
+ALL IN ONE GUIDE FOR BITNAMI AWS WP -
+https://docs.bitnami.com/aws/how-to/get-started-wordpress-aws-marketplace-intermediate/
+
+Credentials of godaddy:
+User code: 231395584
+Pwd: 212212aAa
+
+NS for existing idlike.app -
+ns1.dns-parking.com
+ns2.dns-parking.com
+
+NS for AWS BITNAMI WP -
+ns-1932.awsdns-49.co.uk.
+ns-993.awsdns-60.net.
+ns-325.awsdns-40.com.
+ns-1167.awsdns-17.org.
+
+IT TAKES 3 HOURS TO REFRESH DNS

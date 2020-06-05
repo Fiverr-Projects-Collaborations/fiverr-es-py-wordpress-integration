@@ -1,0 +1,96 @@
+Plugin:
+ACF TO REST API
+Settings->Permalinks to toggle v2/v3 version
+https://github.com/airesvsg/acf-to-rest-api/
+
+
+Create Post-
+POST
+https://idlike.app/wp-json/wp/v2/piatto
+Body:
+{
+    "title": "Tartare di Salmone",
+    "author": "Nikhil",
+    "content": "AVcasda",
+    "status": "publish",
+    "featured_media": 22080
+    //Any other info
+}
+
+
+Update POST-
+POST
+https://idlike.app/wp-json/wp/v2/piatto/22896
+Body:
+{
+    "title": "Tartare di Salmone",
+    "author": "Nikhil",
+    "content": "AVcasda",
+    "status": "publish",
+    "featured_media": 22080
+    //Any other info
+}
+
+
+Insert/update ACF(Advanced Custom Fields) to a POST
+POST/PUT
+https://idlike.app/wp-json/acf/v3/piatto/22896
+Body:
+{
+    "fields": {
+        "restaurant_associated": 2622,
+        "food_keywords": "K1",
+        "food_ingredients": "I1, I2",
+        "food_description": "DESC",
+        "food_price": 8.5,
+        "food_images": [
+                {
+                    "ID": 22080,
+                    "id": 22080,
+                    "title": "585e46ca-0df6-4015-839b-4055c02cf580",
+                    "filename": "585e46ca-0df6-4015-839b-4055c02cf580.jpeg",
+                    "filesize": 66801,
+                    "url": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580.jpeg",
+                    "link": "https://www.idlike.app/mc-donald-stadio/carne-alla-siciliana-titolo-piu-lungo-carbonara/585e46ca-0df6-4015-839b-4055c02cf580/",
+                    "alt": "",
+                    "author": "1",
+                    "description": "",
+                    "caption": "",
+                    "name": "585e46ca-0df6-4015-839b-4055c02cf580",
+                    "status": "inherit",
+                    "uploaded_to": 2411,
+                    "date": "2020-05-15 12:39:16",
+                    "modified": "2020-05-15 12:39:16",
+                    "menu_order": 0,
+                    "mime_type": "image/jpeg",
+                    "type": "image",
+                    "subtype": "jpeg",
+                    "icon": "https://www.idlike.app/wp-includes/images/media/default.png",
+                    "width": 550,
+                    "height": 733,
+                    "sizes": {
+                        "thumbnail": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580-150x150.jpeg",
+                        "thumbnail-width": 150,
+                        "thumbnail-height": 150,
+                        "medium": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580-225x300.jpeg",
+                        "medium-width": 225,
+                        "medium-height": 300,
+                        "medium_large": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580.jpeg",
+                        "medium_large-width": 550,
+                        "medium_large-height": 733,
+                        "large": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580.jpeg",
+                        "large-width": 550,
+                        "large-height": 733,
+                        "1536x1536": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580.jpeg",
+                        "1536x1536-width": 550,
+                        "1536x1536-height": 733,
+                        "2048x2048": "https://www.idlike.app/wp-content/uploads/2020/01/585e46ca-0df6-4015-839b-4055c02cf580.jpeg",
+                        "2048x2048-width": 550,
+                        "2048x2048-height": 733
+                    }
+                }
+            ],
+        "food_ranking_weight": 9,
+        "food_notes": "Note"
+    }
+}

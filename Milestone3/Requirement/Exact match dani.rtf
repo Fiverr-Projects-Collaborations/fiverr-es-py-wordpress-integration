@@ -1,0 +1,263 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2512
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;\f2\fswiss\fcharset0 Helvetica-Oblique;
+}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh18000\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+The "
+\f1\b exact_match score
+\f0\b0 " for a CPT is sum of any \'91partial\'92 score due to the match of \'91parts\'92 of the searched terms.\
+Definition of \'91exact\'92 is that the terms matching are \'91divided\'92 by comma (,)\
+\
+Imagine search terms: \'91bbq sauce\'92\
+And CPT:\
+1) chicken, bbq sauce, eggs\
+2) chicken bbq, mayo sauce, eggs\
+\
+Both will be showed results, but we want the CPT 1) to rank better because \'91bbq sauce\'92 are \'91between comma\'92. \
+
+\f1\b \
+
+\f0\b0 With this in mind, the 
+\f1\b RULES 
+\f0\b0 to assign a score are based on 2 different KPI:
+\f1\b \
+KPI Number of terms\
+
+\f2\i\b0 Higher the number of terms between comma, higher is the score assigned
+\f1\i0\b \
+\
+KPI Sorting of terms \
+
+\f2\i\b0 Higher is the accuracy of the match between the sorting of the keywords in the CPT compared with the sorting of the searched terms\
+
+\f0\i0 \
+\
+Example for better understanding.\
+Imagine to search these terms (each letter is a word):\
+A B C D\
+\
+\
+
+\f1\b Because of KPI1 Number of terms\
+
+\f0\b0 a CPT with: \
+A B C, D\
+Must rank better than a CPT with:\
+A B, C, D\
+\
+
+\f1\b Because of KPI2 Sorting of terms\
+
+\f0\b0 a CPT with:\
+- A B C, D\
+must rank better than a CPT with:\
+- A C D, B or - A C B, D\
+\
+while a CPT with: \
+- B C D, A\
+will rank the same (ABC is respecting the order in the same way BCD is respecting the order)\
+\
+\
+
+\f1\b **** How to assign a score ****\
+
+\f0\b0 In order to assign a score, we have to consider 
+\f1\b all the \'93ordered combinations\'94 of the searched terms.
+\f0\b0  \
+With the example of searched terms \'91A B C D\'92, the \'93ordered combinations\'94 are\
+\
+# ORDERED COMBINATIONS OF 4 KEYWORDS OUT OF 4  (IS ONLY 1):\
+- A B C D\
+-> a CPT that matches this combination will get a score of \'91
+\f1\b X\'92
+\f0\b0  (it will coincide with the cardinality of the set of searched terms, in this case 4).\
+
+\f1\b Score_4combination_KPI1= X\
+
+\f0\b0 \
+Therefore, if the sorting of the keywords present in the CPT is exactly the same (A B C D rather than A C B D) an additional score X/2 will be assigned.\
+
+\f1\b Score_4combination_KPI2= X/2\
+\
+So the total score_4combination will be: Score_4combination_KPI1 + Score_4combination_KPI2  = 1.5 * X 
+\f0\b0 (in the case of perfect matching, so this is the maximum score)
+\f1\b \
+\
+
+\f0\b0 \
+# ORDERED COMBINATIONS OF 3 KEYWORDS OUT OF 4  (THEY ARE 4):\
+- A B C\
+- A B D\
+- A C D\
+- B C D\
+\
+\
+A CPT will have assigned a score for EACH matching of these combinations:\
+
+\f1\b Score_3combination_KPI1= X-1 
+\f0\b0 (for one combination) -> 
+\f1\b N * (X-1)\
+Score_3combination_KPI2= (X-1)/2 
+\f0\b0 (for one combination) -> 
+\f1\b M * (X-1)/2\
+So the total score_3combination will be: Score_3combination_KPI1 + Score_3combination_KPI2 = N * (X-1) + M * (X-1)/2 = (N + M/2) * (X-1)\
+\
+
+\f0\b0 Where
+\f1\b  N
+\f0\b0  is the number of 3combinations matched, and 
+\f1\b M
+\f0\b0  is the number of combinations with a \'91ordered match\'92\
+As you can see
+\f1\b  M <= N\
+
+\f0\b0 \
+\
+# ORDERED COMBINATION OF 2 KEYWORDS OUT OF 4  (THEY ARE 6):\
+- A B\
+- A C\
+- A D\
+- B C\
+- B D\
+- C D\
+\
+A CPT will have assigned a score for EACH matching of these combinations:\
+
+\f1\b Score_2combination_KPI1= X-2 
+\f0\b0 (for one combination) -> 
+\f1\b N * (X-2)\
+Score_2combination_KPI2= (X-2)/2. 
+\f0\b0 (for one combination) -> 
+\f1\b M * (X-2)/2\
+So the total score_2combination will be: Score_2combination_KPI1 + Score_2combination_KPI2 = N * (X-2) + M * (X-2)/2 = (N + M/2) * (X-2)\
+
+\f0\b0 \
+Where
+\f1\b  N
+\f0\b0  is the number of 2combinations matched, and 
+\f1\b M
+\f0\b0  is the number of combinations with a \'91ordered match\'92\
+As you can see
+\f1\b  M <= N\
+\
+\
+\
+
+\f0\b0 We will not consider 1combinations in the sorting algorithm, even if CPT with only 1combinations (like A, B, C, D) will be anyway showed as results (their exact_match score will be 0)\
+\
+\
+\
+In the end, the
+\f1\b  
+\f0\b0 TOTAL SCORE
+\f1\b  
+\f0\b0 will be: 
+\f1\b \
+exact_match score =
+\f0\b0  
+\f1\b score_4combination + score_3combination + score_2combination \
+\
+
+\f0\b0 \
+/\'97\'97\'97\'97\'97/\
+\
+\
+To 
+\f1\b GENERALIZE 
+\f0\b0 for a search of 
+\f1\b X
+\f0\b0  terms:\
+# ORDERED COMBINATIONS OF 
+\f1\b K
+\f0\b0  KEYWORDS OUT OF 
+\f1\b X
+\f0\b0 :\
+\
+The number of these combinations is 
+\f1\b Z = X! / (K! * (X-K)!) , 
+\f0\b0 for each K
+\f1\b \ul \
+\ulnone Score_Kcombination_KPI1= N * (X - (X-K))\
+Score_Kcombination_KPI2= M * (X - (X-K))/2
+\f0\b0 \
+\
+Where 
+\f1\b N
+\f0\b0  is the number of combinations matched for that K, and 
+\f1\b M
+\f0\b0  is the number of combinations with a \'91ordered match\'92 \
+For each K, the value of \ul N could be between 0 and Z\ulnone . Same for M, just it must be M <= N\
+\
+\
+The 
+\f1\b TOTAL SCORE
+\f0\b0  will be
+\f1\b : \
+exact_match score = score_Xcombination + score_(X-1)combination + \'85. + score_2combination \
+\
+
+\f0\b0 Or better 
+\f1\b SUM of
+\f0\b0  
+\f1\b score_(X-K)combination
+\f0\b0 , with 
+\f1\b K varying between 0 and X-2\
+\
+\
+
+\f0\b0 /\'97\'97\'97\'97\'97\'97/\
+\
+\
+
+\f1\b *** Let\'92s do 2 examples where we use this method to attribute a score: ***\
+
+\f0\b0 \
+
+\f1\b EXAMPLE1
+\f0\b0 \
+Search terms: \'91A B C D\'92\
+CPT: \'91A B, D C\'92\
+\
+Which will be its score?\
+-#0 of 4-combination -> 0\
+-#0 of 3-combination -> 0\
+-#2 of 2-combination:\
+	- (A B) with exact order -> Score_KPI1= (X-2) ; Score KPI2= (X-2)/2 -> Partial score = 1.5*(X-2)\
+	- (C D) with wrong order -> Score_KPI1= (X-2); Score KPI2=0 -> Partial score = (X-2)\
+\
+Total score is obtained with the sum of each partial score, so total score = 1.5*(X-2) + (X-2) = 2.5*(X-2)\
+In this case X = 4 -> TOTAL SCORE = 5\
+\
+Just to be clear, in this case:\
+For K = 4 -> N = 0, M = 0\
+For K = 3 -> N = 0, M = 0\
+For K = 2 -> N = 2, M = 1\
+\
+\
+\
+
+\f1\b EXAMPLE2
+\f0\b0 \
+Search terms: \'91A B C D\'92\
+CPT: \'91B C A, D\'92\
+\
+-#0 of 4-combination -> 0\
+-#1 of 3-combination:\
+		- (A B C) with wrong order -> Score_KPI1= (X-1); Score KPI2=0 -> Partial score = (X-1)\
+-#3 of 2-combination:\
+		- (A B) with wrong order -> Score_KPI1= (X-2); Score KPI2=0 -> Partial score = (X-2)\
+		- (A C) with wrong order -> Score_KPI1= (X-2); Score KPI2=0 -> Partial score = (X-2) (please note that even if the CPT would have \'91B A C, D\'92 terms, (A C) is anyway a no correct ordering (terms not consecutive)\
+		- (B C) with exact order -> Score_KPI1= (X-2); Score KPI2= (X-2)/2 -> Partial score = 1.5*(X-2)\
+ \
+Total score is obtained with the sum of each partial score, so total score = (X-1) + (X-2) + (X-2) + (X-2)*1.5 = (X-1) + 3.5*(X-2)\
+In this case X = 4 -> TOTAL SCORE = 10\
+\
+Just to be clear, in this case:\
+For K = 4 -> N = 0, M = 0\
+For K = 3 -> N = 1, M = 0\
+For K = 2 -> N = 3, M = 1\
+}

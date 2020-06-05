@@ -1,0 +1,58 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2512
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh18000\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 The sorting is determined combining different factors, each one with his own weight.\
+\
+
+\f1\b Factor1: Exact match \
+
+\f0\b0 An exact match is worth more than a non exact match.\
+So if the term searched is "bbq sauce" and we have 3 different "Piatto" with the following keyword:\
+Piatto1 -> chicken bbq, mayo sauce\
+Piatto 2 -> chicken bbq\
+Piatto 3-> chicken, mayo sauce, bbq sauce\
+Piatto 4 -> chicken, bbq sauce\
+\
+The ranking would be:\
+1st -> Piatto3 and Piatto4 with same score\
+2nd -> Piatto 1\
+(Piatto2 is not even found cos the keyword sauce is missing)\
+ \
+The exact match has a weight of 50% on the final sorting.\
+\
+\
+\
+
+\f1\b Factor 2: Sort by best rating
+\f0\b0  (4.8 stars and 100 review is better than 5.0 stars and 2 review)\
+To achieve that you can use the lower bound of Wilson, I'm sure you know it since you\'92re familiar with ES.\
+If not, here is well explained how to implement it on "Elastic Search" -> https://www.elastic.co/blog/better-than-average-sort-by-best-rating-with-elasticsearch \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 The sort by best rating has a weight of 50% on the final sorting.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\
+
+\f1\b So the combination of these 2 (each one with an impact of 50%) determine the final sorting of the item.\
+
+\f0\b0 \
+\
+\'97\'97\'97\'97\
+\
+
+\f1\b In addition to that
+\f0\b0  we want to be able to alterate the score resulting from these 2 factors above using the rank_weight (is the field present in the CSV we upload.)\
+With this 
+\f1\b "rank_weight
+\f0\b0 " we want to be able 
+\f1\b to influence in a variable way positively or negatively even if by default it will be neutral.
+\f0\b0 \
+When I say variable way, I mean that this coefficient 
+\f1\b could influence the sorting or a little bit or a lot.
+\f0\b0 \
+When I say a lot I mean that even if the Factor 1 and Factor 2 would lead the item to rank last in the result of a given search, with this "rank_weight" we want to be able to push the item in first position for example. The other way around is true as well, even if the Factor 1 and Factor 2 would lead the item to rank first in the result of a given search, with this "rank_weight" we want to be able to push the item in last position for example.}
