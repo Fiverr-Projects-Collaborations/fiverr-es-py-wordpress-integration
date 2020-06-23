@@ -1,0 +1,65 @@
+//array combination
+def arr_comb = ['insalata pollo', 'insalata','pollo'];
+// text generated with multiple fields
+//String text = ',di, insalataabcd di pollo, di, a ,di di,a a,di insalatac dipollo ,di, dis grigliatodi, poddo, word2, word3, word1, pobbo ,poddo ,di ,poddo, poddo,a a,poddo poddodis'
+String text = 'insalataasas anirudhpollo asdasinsalata di pollo, pollo, di, di a ,di di,a a,di anirudhpoddo poddoanirudhdi, ,diaa poddo, ,poddo ,poddo,insalata pollo';
+print 'original: ' + text
+print '\n';
+text = text.toLowerCase();
+//stopword list
+def stopwords =['di','dis'];
+
+def z1 = text.split(' ');
+for(String x: stopwords){
+    z1 = z1.stream().map{t->t.trim().equals(x) ? '' : t.trim().replaceAll('^,','').replaceAll(',$','').equals(x)? ',' :t.trim().replaceAll(',\\w+','').equals(x)?t.replace(x+',',','):t.trim().replaceAll('\\w+,','').equals(x)?t.replace(','+x,','):t}.toList();
+}
+text = z1.join(' ')
+// new text by removing stop words
+text = text.replaceAll(', ,',',').replaceAll(',,',',').replaceAll('\\s+',' ');
+print 'After removing stopwords: ' + text;
+print '\n';
+
+def zz = text.split(' ');
+//synonym list
+def synonyms = [['pollo','pobbo','poddo'],['word1','word2','word3']]
+
+for (def p: synonyms){
+    zz = zz.stream().map{ t -> p.contains(t) ? p[0] : p.contains(t.trim().replaceAll('^,',''))? ','+p[0] : p.contains(t.trim().replaceAll(',$','')) ? p[0] + ',': p.contains(t.trim().replaceAll('^,','').replaceAll(',$',''))? ',' + p[0] + ',': t.split(',').stream().filter{ u -> p.contains(u) }.toList().size() > 0 ? t.split(',').stream().map{ u -> p.contains(u) ? p[0] : u }.toList().join(','):t}.toList();
+}
+text = zz.join(' ')
+text = text.replaceAll(', ,',',').replaceAll(',,',',').replaceAll('\\s+',' ');
+print 'After replacing synomyns with first word in synonym list: ' + text;
+print '\n';
+
+
+//text = "insalata di pollo, insalata pollo grigliato, insalatina, novella, emmental, petto grigliato, insalatina novella, emmental"
+
+// Example 2
+//def arr_comb = ["carciofi funghi","carciofi","funghi"];
+//text="4 Stagioni,Pizza quattro stagioni, mozzarella, pomodoro, olio, prosciutto cotto, funghi, carciofi,Mozzarella fior di latte di agerola, pomodoro, olio, prosciutto cotto, funghi e carciofi"
+//text="Charleston,Pizza, mozzarella fior di latte, pomodoro, olio, uovo, carciofi, funghi, prosciutto cotto, vegetariana,Mozzarella fior di latte di agerola, pomodoro, olio, uovo, carciofi, funghi e prosciutto cotto"
+
+double score = 0;
+
+//split "text" by ","
+def new_l = Arrays.asList(text.split(','));
+//for each element y in new_l
+def firstList = new ArrayList();
+def secondList = new ArrayList();
+for(String y: new_l){
+  //trim any white spaces eg: " barbeque sauce  " -> "barbeque sauce"
+  String x = y.trim();
+  firstList.addAll(arr_comb.stream().filter{t -> x.equals(t) || (x.contains(t)&& x.split(' ').contains(t)) }.toList());
+  secondList.addAll(arr_comb.stream().filter{t->Arrays.asList(x.split(' ')).containsAll(Arrays.asList(t.split(' ')))}.toList());
+  }
+  print 'first list:\n'
+for(String z : firstList){
+    score = score + z.split(' ').size()/2;
+    print z+'\n'
+}
+print 'second list:\n'
+for(String z : secondList){
+    score = score + z.split(' ').size();
+    print z+'\n'
+}
+print score;

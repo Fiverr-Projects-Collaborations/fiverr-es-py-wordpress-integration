@@ -1,0 +1,110 @@
+["A B", "A C", "A D", "B C", "B D", "C D", "A B C", "A B D", "A C D", "B C D", "A B C D"]
+
+
+int size = / /.split(y).length;
+def y = arr_comb[i];
+int len_y = / /.split(y).length;
+
+for (def i = 0; i < arr_comb.length; i++) {
+    def str = arr_comb[i];
+    if(doc['abc.raw'].value.contains(str)) score = score + / /.split(str).length / 2;
+    if(Arrays.asList(/,/.split(doc['abc.raw'].value)).contains(str)) score = score + / /.split(str).length;
+    score = score + Arrays.asList(/,/.split(doc['abc.raw'].value)).stream().map(A::getName).mapToInt(String::length).max();
+
+    if(doc['abc.raw'].value.startsWith(str)) score = score + / /.split(str).length/2;
+}
+
+for (def j = 0; j < /,/.split(doc['abc.raw'].value).length; i++) {
+  if(Arrays.asList(/ /.split(doc['abc.raw'].value)).stream().anyMatch(t->t.contains(str))) score = score + / /.split(str).length;
+}
+
+#score = (score + len(y.split(" ")) / 2) if data.startswith(y) else score
+
+#score = (score + len(y.split(" ")) / 2) if y in data_stripped else score
+#score = (score + len(y.split(" ")) / 2) if data_stripped.startswith(y) else score
+
+score = (score + len(y.split(" ")) / 2) if y in data else score
+score = (score + len(y.split(" "))) if len(filter_data(data.split(","), y)) > 0 else score
+
+
+
+double score = 0;
+String searchText = \"A B C D\";
+def arr_comb = [\"A B\", \"A C\", \"A D\", \"B C\", \"B D\", \"C D\", \"A B C\", \"A B D\", \"A C D\", \"B C D\", \"A B C D\"];
+score = score + (doc['abc.raw'].value.equals(\"A B C D\") ? 1.5 * / /.split(searchText).length : 0);
+for (def i = 0; i < arr_comb.length; i++) {
+  String str = arr_comb[i];
+  if(doc['abc.raw'].value.contains(str)) score = score + / /.split(str).length * 2;
+}
+score = score + Arrays.asList(/,/.split(doc['abc.raw'].value.replace(\" \",\"\"))).stream().map(t->t.length()).max(Comparator.comparing(Integer::valueOf)).get()*3;
+for(String i : /,/.split(doc['abc.raw'].value)){
+  if (searchText.contains(i.trim()) && i.trim().length()>1) score = score + searchText.contains(i.trim().length());
+}
+return score;
+
+
+for (def i = 0; i < arr_comb.length; i++) {
+for (def j = 0; j < /,/.split(doc['abc.raw'].value).length; i++) {
+}
+}
+
+
+LOGIC QUERY
+
+{
+    "_source": [
+        "abc"
+    ],
+    "query": {
+        "match_all": {}
+    },
+    "script_fields": {
+        "test1": {
+            "script": {
+                "lang": "painless",
+                "source": "def arr = [\"A\",\"B\",\"C\",\"D\"]; def x = / /.split(\"A B\"); Arrays.asList(x).contains(\"A\"); Arrays.asList(/,/.split(doc['abc.raw'].value)).contains(\"A B C\");Arrays.asList(/,/.split(doc['abc.raw'].value)).stream().map(t->t.length()).max(Comparator.comparing(Integer::valueOf)).get()"
+            }
+        }
+    },
+    "sort": {
+        "_script": {
+            "type": "number",
+            "script": {
+                "lang": "painless",
+                "source": "double score = 0;  String searchText = \"A B C D\"; def arr_comb = [\"A B\", \"A C\", \"A D\", \"B C\", \"B D\", \"C D\", \"A B C\", \"A B D\", \"A C D\", \"B C D\", \"A B C D\"]; score = score + (doc['abc.raw'].value.equals(\"A B C D\") ? 1.5 * / /.split(searchText).length : 0);  for (def i = 0; i < arr_comb.length; i++) { String str = arr_comb[i].trim(); if(doc['abc.raw'].value.contains(str)) score = score + / /.split(str).length ;} score = score + Arrays.asList(/,/.split(doc['abc.raw'].value)).stream().map(t->t.trim().length()).max(Comparator.comparing(Integer::valueOf)).get(); for(String i : /,/.split(doc['abc.raw'].value)){ if (i.trim().contains(searchText) && i.trim().length()>1) score = score + i.trim().length()/2;if (searchText.contains(i.trim()) && i.trim().length()>1) score = score + i.trim().length()/2;} return score;"
+            },
+            "order": "desc"
+        }
+    }
+}
+
+FINAL query
+{
+    "query": {
+        "bool": {
+            "must": [
+                {
+                    "match": {
+                        "meta.food_ingredients.value": "salsa"
+                    }
+                }, {
+                    "match": {
+                        "meta.food_ingredients.value": "piccante"
+                    }
+                }
+            ]
+        }
+    },
+    "sort": {
+        "_script": {
+            "type": "number",
+            "script": {
+                "lang": "painless",
+                "source": "double score = 0;  String searchText = \"salsa piccante\"; def arr_comb = [\"salsa\", \"piccante\"]; score = score + (doc['meta.food_ingredients.raw'].value.equals(searchText) ? 1.5 * / /.split(searchText).length : 0);  for (def i = 0; i < arr_comb.length; i++) { String str = arr_comb[i].trim(); if(doc['meta.food_ingredients.raw'].value.contains(str)) score = score + / /.split(str).length ;} score = score + Arrays.asList(/,/.split(doc['meta.food_ingredients.raw'].value)).stream().map(t->t.trim().length()).max(Comparator.comparing(Integer::valueOf)).get(); for(String i : /,/.split(doc['meta.food_ingredients.raw'].value)){ if (i.trim().contains(searchText) && i.trim().length()>1) score = score + i.trim().length();if (searchText.contains(i.trim()) && i.trim().length()>1) score = score + i.trim().length();} return score;"
+            },
+            "order": "desc"
+        }
+    }
+}
+
+if(!(Collections.disjoint(title_list, arr_comb) && Collections.disjoint(rest_list, arr_comb))) return 1;

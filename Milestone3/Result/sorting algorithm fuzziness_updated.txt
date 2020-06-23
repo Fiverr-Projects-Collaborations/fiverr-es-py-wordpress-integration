@@ -1,0 +1,69 @@
+//user entered arr comb
+arr_comb=["insalata collo", "insalata", "collo"]
+//data from elasticsearch after synonym and stop words
+text="insalata pollo,  follo insalata pollo grigliato, coitto dollo,insalatina, novella, emmental, petto grigliato, insalatina novella, emmental"
+text = text.replaceAll(',',' ').replaceAll('\\s+',' ');
+def arr_comb2 = new ArrayList(arr_comb);
+def arr_comb3 = new ArrayList();
+int min1 = 2;
+int min2 = 3;
+int min3 = 4;
+
+for(String str2: arr_comb){
+
+    for (String str1: text.split(' ')){
+    def str1_len = str1.length()
+    def str2_len = str2.length()
+    int[][] distance = new int[str1_len + 1][str2_len + 1]
+    (str1_len + 1).times { distance[it][0] = it }
+    (str2_len + 1).times { distance[0][it] = it }
+    (1..str1_len).each { i ->
+       (1..str2_len).each { j ->
+          distance[i][j] = [distance[i-1][j]+1, distance[i][j-1]+1, str1[i-1]==str2[j-1]?distance[i-1][j-1]:distance[i-1][j-1]+1].min()
+       }
+    }
+    // distance = 1, length of string between <=5
+    if(distance[str1_len][str2_len] <=2 && str2.size()>0 && str2.size() <= 5 && distance[str1_len][str2_len] <min1){
+        min1 = distance[str1_len][str2_len];
+        print str1 + ':' + str2 + ' : ' + distance[str1_len][str2_len] + '\n'
+        //text = text.replace(str1,str2)
+        arr_comb2 =  arr_comb2.stream().map{t->t.replaceAll(str2,str1)}.toList();
+    }else if(distance[str1_len][str2_len] <=2  && str2.size()>0 &&  str2.size() <= 5 && distance[str1_len][str2_len] ==min1){
+        if(!arr_comb3.contains(str1)){
+            print str1 + ':' + str2 + ' : ' + distance[str1_len][str2_len] + '\n'
+            arr_comb3.add(str1);
+        }
+    }
+    // distance = 2, length of string between 6-10
+    if(distance[str1_len][str2_len] <=3 && str2.size() >5 && str2.size()<10 && distance[str1_len][str2_len] <min2){
+        min2 = distance[str1_len][str2_len];
+        print str1 + ':' + str2 + ' : ' + distance[str1_len][str2_len] + '\n'
+        //text = text.replace(str1,str2)
+        arr_comb2 =  arr_comb2.stream().map{t->t.replaceAll(str2,str1)}.toList();
+    }
+    else if(distance[str1_len][str2_len] <=3 && str2.size() >5 && distance[str1_len][str2_len] ==min2){
+        if(!arr_comb3.contains(str1)){
+            print str1 + ':' + str2 + ' : ' + distance[str1_len][str2_len] + '\n'
+            arr_comb3.add(str1);
+        }
+
+    }
+    if(distance[str1_len][str2_len] <=4 && str2.size() >=10 && distance[str1_len][str2_len] < min3){
+        min3 = distance[str1_len][str2_len];
+        print str1 + ':' + str2 + ' : ' + distance[str1_len][str2_len] + '\n'
+        //text = text.replace(str1,str2)
+        arr_comb2 =  arr_comb2.stream().map{t->t.replaceAll(str2,str1)}.toList();
+    }
+    else if(distance[str1_len][str2_len] <=4 && str2.size() >=10 && distance[str1_len][str2_len] ==min3){
+        if(!arr_comb3.contains(str1)){
+            print str1 + ':' + str2 + ' : ' + distance[str1_len][str2_len] + '\n'
+            arr_comb3.add(str1);
+        }
+    }
+    }
+}
+//new arr_comb
+arr_comb2.addAll(arr_comb3);
+arr_comb = new HashSet(arr_comb2);
+print 'final user arr_comb after modification: '
+print arr_comb;

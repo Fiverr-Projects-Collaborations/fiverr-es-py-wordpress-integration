@@ -1,0 +1,28 @@
+[root@ip-172-31-41-160:/opt/bitnami/letsencrypt# sudo /opt/bitnami/letsencrypt/lego --tls --email="fabri.casella@gmail.com" --domains="idlike.app" --domains="www.idlike.app" --path="/opt/bitnami/letsencrypt" run
+2020/06/09 06:15:33 No key found for account fabri.casella@gmail.com. Generating a P384 key.
+2020/06/09 06:15:33 Saved key to /opt/bitnami/letsencrypt/accounts/acme-v02.api.letsencrypt.org/fabri.casella@gmail.com/keys/fabri.casella@gmail.com.key
+2020/06/09 06:15:33 Please review the TOS at https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf
+Do you accept the TOS? Y/n
+Y
+2020/06/09 06:15:47 [INFO] acme: Registering account for fabri.casella@gmail.com
+!!!! HEADS UP !!!!
+
+Your account credentials have been saved in your Let's Encrypt
+configuration directory at "/opt/bitnami/letsencrypt/accounts".
+
+You should make a secure backup of this folder now. This
+configuration directory will also contain certificates and
+private keys obtained from Let's Encrypt so making regular
+backups of this folder is ideal.
+2020/06/09 06:15:47 [INFO] [idlike.app, www.idlike.app] acme: Obtaining bundled SAN certificate
+2020/06/09 06:15:48 [INFO] [idlike.app] AuthURL: https://acme-v02.api.letsencrypt.org/acme/authz-v3/5115126670
+2020/06/09 06:15:48 [INFO] [www.idlike.app] AuthURL: https://acme-v02.api.letsencrypt.org/acme/authz-v3/5115126671
+2020/06/09 06:15:48 [INFO] [idlike.app] acme: use tls-alpn-01 solver
+2020/06/09 06:15:48 [INFO] [www.idlike.app] acme: use tls-alpn-01 solver
+2020/06/09 06:15:48 [INFO] [idlike.app] acme: Trying to solve TLS-ALPN-01
+2020/06/09 06:15:53 [INFO] [idlike.app] The server validated our request
+2020/06/09 06:15:53 [INFO] [www.idlike.app] acme: Trying to solve TLS-ALPN-01
+2020/06/09 06:16:00 [INFO] [www.idlike.app] The server validated our request
+2020/06/09 06:16:00 [INFO] [idlike.app, www.idlike.app] acme: Validations succeeded; requesting certificates
+2020/06/09 06:16:01 [INFO] [idlike.app] Server responded with a certificate.
+root@ip-172-31-41-160:/opt/bitnami/letsencrypt#

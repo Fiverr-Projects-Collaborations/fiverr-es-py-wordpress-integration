@@ -1,0 +1,33 @@
+
+http://localhost:9200/test_index_idlike
+{
+    "mappings": {
+        "properties": {
+            "abc": {
+                "type": "text",
+                "fielddata": true,
+                "fields": {
+                    "raw": {
+                        "type": "keyword"
+                    }
+                }
+            }
+        }
+    }
+}
+
+http://localhost:9200/_bulk
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"A B C D"}
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"A B C, D"}
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"A B, C, D"}
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"A C D, B"}
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"A C B, D"}
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"B C D, A"}
+{ "index" : { "_index" : "test_index_idlike"} }
+{"abc":"A,B F E, A"}

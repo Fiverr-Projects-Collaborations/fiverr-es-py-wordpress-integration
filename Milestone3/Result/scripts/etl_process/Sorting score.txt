@@ -1,0 +1,13 @@
+select p.id,pm_r.meta_value as rating from wp_posts p
+join wp_postmeta pm
+	on pm.meta_value = p.id
+	and pm.meta_key = '_assigned_to'
+join wp_postmeta pm_r
+	on pm.post_id = pm_r.post_id
+	and pm_r.meta_key = '_rating'
+join wp_posts pr
+	on pr.id = pm.post_id
+	AND pr.post_status = 'publish'
+where p.id = 26692
+	AND p.post_type = 'piatto'
+	AND p.post_status = 'publish';

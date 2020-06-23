@@ -1,0 +1,87 @@
+
+//Solution provided By Daniele
+//----------------------------
+
+// Example 1
+def arr_comb = ["insalata pollo","insalata","pollo"];
+text = 'crispy chicken burger, panino, filetto di pollo, chicken, burger, hamburger, , corn flakes, paprika, crispy bacon, insalata, pomodoro fresco, confettura datterini gialli,filetto di pollo in crosta di corn flakes leggermente speziato alla paprika, crispy bacon, insalata, pomodoro fresco e confettura di datterini gialli'
+//text = "insalata di pollo, insalata pollo grigliato, insalatina, novella, emmental, petto grigliato, insalatina novella, emmental"
+
+// Example 2
+//def arr_comb = ["carciofi funghi","carciofi","funghi"];
+//text="4 Stagioni,Pizza quattro stagioni, mozzarella, pomodoro, olio, prosciutto cotto, funghi, carciofi,Mozzarella fior di latte di agerola, pomodoro, olio, prosciutto cotto, funghi e carciofi"
+//text="Charleston,Pizza, mozzarella fior di latte, pomodoro, olio, uovo, carciofi, funghi, prosciutto cotto, vegetariana,Mozzarella fior di latte di agerola, pomodoro, olio, uovo, carciofi, funghi e prosciutto cotto"
+
+double score = 0
+
+//split "text" by ","
+def new_l = Arrays.asList(text.split(','));
+//for each element y in new_l
+for(String y: new_l){
+  //trim any white spaces eg: " barbeque sauce  " -> "barbeque sauce"
+	String x = y.trim();
+
+	for(String z: arr_comb) {
+ 	 //if x contains element z  ---> FOR EXACT MATCH  <———
+  		if(x.contains(z)){
+  	  //add length of z/2 to the score.//score = score + z.split(' ').length/2;
+    		print x + '\n'
+   			print 'EXACT MATCH OF ' + z + ' IN ' + x + '\n'
+   			score = score + z.split(' ').length/2
+   			print score + '\n'
+  		}
+		if(Arrays.asList(x.split(' ')).containsAll(Arrays.asList(z.split(' '))) ){ //---> FOR NORMAL MATCH  <———
+   	 //add length of z to the score
+   			print x + '\n'
+			print 'NORMAL MATCH OF ' + z + ' IN ' + x + '\n'
+    		score = score + z.split(' ').length
+  			print (score + '\n')
+		}
+	}
+  }
+
+
+
+
+//Workable solution in es
+//------------------------
+
+  // Example 1
+  def arr_comb = ["insalata pollo","insalata","pollo"];
+  text = 'crispy chicken burger, panino, filetto di pollo, chicken, burger, hamburger, , corn flakes, paprika, crispy bacon, insalata, pomodoro fresco, confettura datterini gialli,filetto di pollo in crosta di corn flakes leggermente speziato alla paprika, crispy bacon, insalata, pomodoro fresco e confettura di datterini gialli'
+  //text = "insalata di pollo, insalata pollo grigliato, insalatina, novella, emmental, petto grigliato, insalatina novella, emmental"
+
+  // Example 2
+  //def arr_comb = ["carciofi funghi","carciofi","funghi"];
+  //text="4 Stagioni,Pizza quattro stagioni, mozzarella, pomodoro, olio, prosciutto cotto, funghi, carciofi,Mozzarella fior di latte di agerola, pomodoro, olio, prosciutto cotto, funghi e carciofi"
+  //text="Charleston,Pizza, mozzarella fior di latte, pomodoro, olio, uovo, carciofi, funghi, prosciutto cotto, vegetariana,Mozzarella fior di latte di agerola, pomodoro, olio, uovo, carciofi, funghi e prosciutto cotto"
+
+  double score = 0;
+
+  //split "text" by ","
+  def new_l = Arrays.asList(text.split(','));
+  //for each element y in new_l
+  def firstList = new ArrayList();
+  def secondList = new ArrayList();
+  for(String y: new_l){
+    //trim any white spaces eg: " barbeque sauce  " -> "barbeque sauce"
+  	String x = y.trim();
+  	firstList.addAll(arr_comb.stream().filter{t -> x.contains(t)}.toList());
+  	secondList.addAll(arr_comb.stream().filter{t->Arrays.asList(x.split(' ')).containsAll(Arrays.asList(t.split(' ')))}.toList());
+    }
+  for(String z : firstList){
+      score = score + z.split(' ').size()/2;
+  }
+  for(String z : secondList){
+      score = score + z.split(' ').size();
+  }
+  print score;
+
+
+
+
+  --eS
+
+  "source": "def arr_comb = [\"insalata pollo\",\"insalata\",\"pollo\"]; arr_comb = arr_comb.stream().map(t->t.toLowerCase()).collect(Collectors.toList()); String text = doc['post_title.raw'].value + ',' + doc['restaurant_title.raw'].value  + ',' + doc['restaurant_address.raw'].value  + ',' + doc['city.raw'].value  + ',' + doc['food_ingredients.raw'].value  + ',' + doc['food_keywords.raw'].value ; text=text.toLowerCase(); double score = 0; def new_l = Arrays.asList(/,/.split(text)); def firstList = new ArrayList(); def secondList = new ArrayList(); for(String y: new_l){ String x = y.trim(); firstList.addAll(arr_comb.stream().filter(t -> x.contains(t)).collect(Collectors.toList())); secondList.addAll(arr_comb.stream().filter(t->Arrays.asList(/ /.split(x)).containsAll(Arrays.asList(/ /.split(t)))).collect(Collectors.toList())); } for(String z : firstList){ score = score + / /.split(z).length/2; } for(String z : secondList){ score = score + / /.split(z).length; } return score;"
+
+  

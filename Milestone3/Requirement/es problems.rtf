@@ -1,0 +1,37 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2512
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 PROBLEM 1\
+Try to search "funghi carciofi":\
+The second item in this case should rank higher cos in his ingredients "funghi carciofi" appear within a comma period (exact match with the string queried), while the first should rank lower cos in his ingredients"funghi carciofi" appears in 2 different comma period (not exact match). \
+\
+PROBLEM 2\
+Try to search "funghi cardiofi" instead of "funghi carciofi". ES should detect the mistake and show the result anyway instead of showing no results (fuzziness missing? Even though in the last call we agreed that fuzziness is not enough and you'll have investigate about some "smarter solution". Btw not even fuzziness is working right now..\
+\
+PROBLEM 3\
+Searching for "charleston" I only see the result that has charleston as title. That's ok but also I expect to see all the dish that have charleston as restaurant.\
+\
+\
+PROBLEM 4\
+Searching "orti" I would expect to find all the dishes that belong to a restaurant that has "orti" in the address, for example this -> https://www.idlike.app/ristorante-charleston/charleston/ this is not happening.\
+\
+\
+PROBLEM 5\
+Where is the live suggestion?\
+\
+\
+There probably are not all the problems, but in order to test better these things above should at least work. Once they work we can deep dive on the functioning of the exact math and other requirements.\
+\
+\
+I remind you that about ES for the 3rd milestone you wrote this:\
+ES\
+----\
+1.AND instead of OR for search text with spaces\
+(eg: BENCH CHEESE)\
+2.fuziness - eg: rib - update based on misspellings vs invalid response\
+3.sorting - need to discuss\
+4.live suggestion - RESEARCH ON THIS}
